@@ -1,0 +1,6 @@
+---
+- name: Ensure groups exist
+  group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ groups }}"

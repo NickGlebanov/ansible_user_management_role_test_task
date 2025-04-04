@@ -1,0 +1,20 @@
+---
+- name: Include group creation
+  include_tasks: groups.yml
+  tags: create_groups
+
+- name: Include user creation
+  include_tasks: users.yml
+  tags: create_users
+
+- name: Include sudoers setup
+  include_tasks: sudo.yml
+  tags: sudo_setup
+
+- name: Include cleanup of users
+  include_tasks: cleanup.yml
+  tags: cleanup
+
+- name: Include expire check
+  include_tasks: expire.yml
+  tags: expire_check

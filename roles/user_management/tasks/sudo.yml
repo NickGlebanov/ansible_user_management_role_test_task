@@ -1,0 +1,8 @@
+---
+- name: Manage sudoers NOPASSWD
+  copy:
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    content: "{{ item.name }} ALL=(ALL) NOPASSWD:ALL"
+    mode: '0440'
+  when: item.sudo | default(false)
+  loop: "{{ users }}"

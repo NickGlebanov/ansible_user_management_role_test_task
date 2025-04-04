@@ -1,0 +1,15 @@
+try {
+  $users = Get-LocalUser | Where-Object { $_.Enabled -eq $true }
+  foreach ($user in $users) {
+    if ($user.Description -match 'expire:(\d{4}-\d{2}-\d{2})') {
+      $expireDate = [datetime]::Parse($matches[1])
+      if ($expireDate -lt (Get-Date)) {
+        Disable-LocalUser -Name $user.Name
+        Write-Output "Disabled expired user: $($user.Name)"
+      }
+    }
+  }
+} catch {
+  Write-Error "Script failed: $_"
+  exit 1
+}

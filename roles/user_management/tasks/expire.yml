@@ -1,0 +1,13 @@
+---
+- name: Deploy expire check script
+  template:
+    src: expire_check.ps1.j2
+    dest: /usr/local/bin/check_user_expire.ps1
+    mode: '0755'
+
+- name: Setup cron job
+  cron:
+    name: "User expire check"
+    minute: "0"
+    hour: "0"
+    job: "/usr/bin/pwsh /usr/local/bin/check_user_expire.ps1"

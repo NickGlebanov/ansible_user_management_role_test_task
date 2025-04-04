@@ -1,0 +1,6 @@
+---
+- name: Ensure users exist
+  include_tasks: user_entry.yml
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user_data
