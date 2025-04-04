@@ -1,20 +1,40 @@
 ---
 - name: Include group creation
-  include_tasks: groups.yml
-  tags: create_groups
+  include_tasks:
+    file: groups.yml
+    apply:
+      tags:
+        - create_groups
+  tags: [create_groups]
 
 - name: Include user creation
-  include_tasks: users.yml
-  tags: create_users
+  include_tasks:
+    file: users.yml
+    apply:
+      tags:
+        - create_users
+  tags: [create_users]
 
 - name: Include sudoers setup
-  include_tasks: sudo.yml
-  tags: sudo_setup
+  include_tasks:
+    file: sudo.yml
+    apply:
+      tags:
+        - sudo_setup
+  tags: [sudo_setup]
 
 - name: Include cleanup of users
-  include_tasks: cleanup.yml
-  tags: cleanup
+  include_tasks:
+    file: cleanup.yml
+    apply:
+      tags:
+        - cleanup
+  tags: [cleanup]
 
 - name: Include expire check
-  include_tasks: expire.yml
-  tags: expire_check
+  include_tasks:
+    file: expire.yml
+    apply:
+      tags:
+        - expire_check
+  tags: [expire_check]
