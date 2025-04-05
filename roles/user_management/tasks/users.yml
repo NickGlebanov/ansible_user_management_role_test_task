@@ -1,6 +1,55 @@
----
-- name: Ensure users exist
-  include_tasks: user_entry.yml
-  loop: "{{ users }}"
+- name: Ensure user is present
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    password: "{{ item.password | default(omit) }}"
+    shell: "{{ item.shell | default(omit) }}"
+    state: present
+    create_home: true
+  loop: "{{ final_users }}"
   loop_control:
-    loop_var: user_data
+    label: "{{ item.name }}"
+
+- name: Fetch SSH key from URL if provided
+  ansible.builtin.uri:
+    url: "{{ item.ssh_key }}"
+    return_content: true
+  register: ssh_key_result
+  when:
+    - item.ssh_key is defined
+    - item.ssh_key is match("^https?://")
+  loop: "{{ final_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Set SSH key content from direct string
+  set_fact:
+    ssh_key_content: "{{ item.ssh_key }}"
+  when:
+    - item.ssh_key is defined
+    - not (item.ssh_key is match("^https?://"))
+  loop: "{{ final_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+
+- name: Ensure .ssh directory exists
+  file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ item.name }}"
+  loop: "{{ final_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Deploy authorized_keys
+  copy:
+    content: "{{ ssh_key_content }}"
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    owner: "{{ item.name }}"
+    mode: '0600'
+  when:
+    - item.ssh_key is defined
+  loop: "{{ final_users }}"
+  loop_control:
+    label: "{{ item.name }}"

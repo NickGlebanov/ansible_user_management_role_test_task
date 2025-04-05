@@ -1,4 +1,24 @@
 ---
+- name: Union users
+  set_fact:
+    final_users: >-
+      {{
+        (admin_users + developer_users)
+        | rejectattr('name', 'in', remove_users | map(attribute='name') | list)
+        | list
+      }}
+  tags:
+    - create_groups
+    - create_users
+    - sudo_setup
+    - cleanup
+    - expire_check
+
+- name: Print final users
+  debug:
+    msg: "users final: \n {{ final_users }} \n ------------------------------"
+
+
 - name: Include group creation
   include_tasks:
     file: groups.yml
@@ -23,13 +43,6 @@
         - sudo_setup
   tags: [sudo_setup]
 
-- name: Include cleanup of users
-  include_tasks:
-    file: cleanup.yml
-    apply:
-      tags:
-        - cleanup
-  tags: [cleanup]
 
 - name: Include expire check
   include_tasks:

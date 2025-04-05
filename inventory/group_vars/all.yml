@@ -1,6 +1,6 @@
 ansible_python_interpreter: /usr/bin/python3
 
-groups:
+user_groups:
   - admins
   - developers
   - others

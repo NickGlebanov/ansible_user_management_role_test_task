@@ -21,10 +21,6 @@ export ANSIBLE_CONFIG=$(pwd)/ansible.cfg
 ansible-playbook -i inventory/hosts.yml playbooks/site.yml --ask-vault-pass
 ```
 
-## Тестирование
-```shell
-ansible-playbook tests/test_users.yml --check
-```
 
 ## Теги для запуска отдельных фич
 ```shell
@@ -34,9 +30,4 @@ ansible-playbook -i inventory/hosts.yml playbooks/site.yml --tags "create_users"
 ## Запуск для отдельной группы хостов
 ```shell
 ansible-playbook -i inventory/hosts.yml playbooks/site.yml --tags "create_groups" --limit dev_servers
-```
-
-## Vault ключ
-```shell
-ansible-vault view secret.yml --vault-password-file .vault_pass.txt
 ```

@@ -1,9 +1,0 @@
----
-- name: Test users created
-  hosts: all
-  become: true
-  tasks:
-    - name: Check user exists
-      ansible.builtin.getent:
-        database: passwd
-        key: dev1

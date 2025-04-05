@@ -1,9 +1,0 @@
----
-- name: Test groups created
-  hosts: all
-  become: true
-  tasks:
-    - name: Ensure group exists
-      getent:
-        database: group
-        key: developers
