@@ -1,4 +1,7 @@
 ---
+
+# TODO add apt/snap install powershell task
+
 - name: Deploy expire check script
   template:
     src: expire_check.ps1.j2
